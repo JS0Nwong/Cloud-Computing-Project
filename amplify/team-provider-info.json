@@ -17,6 +17,12 @@
       },
       "api": {
         "chatapp": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dt7qdlx2sibnq",
+          "type": "manual"
+        }
       }
     }
   }
