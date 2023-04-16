@@ -10,7 +10,7 @@ import Chats from './Chats'
 
 export default function Sidebar() {
   return (
-    <Box sx={{flex: 1, display: "flex", backgroundColor: "blue"}}>
+    <Box sx={{flex: 1, display: "flex", backgroundColor: "#212529"}}>
         <Box sx={{display: "flex", width: "100%"}}>
             <Serverlist />
             <Chats />

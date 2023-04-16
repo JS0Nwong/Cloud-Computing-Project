@@ -9,7 +9,12 @@ import Profile from './Profile'
 
 export default function Chats() {
   return (
-      <Box sx={{ backgroundColor: "red", width: "100%", p: 2, fontWeight: 500 }}>
+      <Box sx={{ 
+        backgroundColor: "#2f2f2f", 
+        width: "100%", 
+        p: 2, 
+        fontWeight: 500
+      }}>
           Direct Messages
           <Box>
             s

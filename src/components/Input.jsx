@@ -9,12 +9,15 @@ import TextField from '@mui/material/TextField'
 export default function Input() {
   return (
     <TextField size='small'
-    sx={{
-      m: 3,
-      position: "fixed",
-      bottom: 0,
-    }}
-    label="Message"
+      variant='filled'
+      multiline
+      maxRows={6}
+      sx={{
+        m: 3,
+        color: "white",
+        backgroundColor: "#343A40",
+      }}
+      label="Message"
     >
     </TextField>
   )

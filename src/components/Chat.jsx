@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import Stack from "@mui/material/Stack"
 import Avatar from "@mui/material/Avatar"
+import Paper from "@mui/material/Paper"
 
 import PhoneIcon from '@mui/icons-material/Phone';
 import VideocamIcon from '@mui/icons-material/Videocam';
@@ -14,27 +15,39 @@ export default function Chat() {
   return (
     <Box sx={{
       flex: 5,
-      backgroundColor: "orange",
+      backgroundColor: "#343A40",
       display: "flex",
       flexDirection: "column",
       overflow: "auto",
     }}>
-      <Box sx={{ 
-        backgroundColor: "purple",
-        p: 2,
-        display: "flex",
-        justifyContent: "space-between"
+      <Paper elevation={2} sx= {{
+        backgroundColor: "#2a3036",
+        borderRadius: "0px 0px 0px 0px",
       }}>
-        <Typography>Username</Typography>
         <Box sx={{
+          p: 2,
           display: "flex",
           justifyContent: "space-between",
-          width: 70
+          color: "white",
         }}>
-          <PhoneIcon />
-          <VideocamIcon />
+          <Typography>Username</Typography>
+          <Box sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: 70
+          }}>
+            <PhoneIcon />
+            <VideocamIcon />
+          </Box>
         </Box>
+      </Paper>
+
+      {/* CHAT MESSAGES */}
+      <Box sx = {{height: "100%"}}>
+
       </Box>
+
+      {/* USER MESSAGE INPUT  */}
       <Input />
     </Box>
   )
