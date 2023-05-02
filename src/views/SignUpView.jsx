@@ -2,8 +2,10 @@ import { useContext, useState } from "react";
 import { Box, Typography, Button, TextField, Alert } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { colors } from "../styles/colors";
-import { Auth } from "aws-amplify";
+import { API, Auth, graphqlOperation } from "aws-amplify";
 import { AuthContext } from "../context/AuthProvider";
+import { createUser } from "../graphql/mutations";
+import { ErrorSnack } from "../components/ErrorSnack";
 
 export const SignUpView = () => {
   const [email, setEmail] = useState("");
@@ -13,25 +15,32 @@ export const SignUpView = () => {
   const navigate = useNavigate();
   const { transfer } = useContext(AuthContext);
 
-  const handleSignUp = () => {
-    Auth.signUp({
-      username,
-      password,
-      attributes: {
-        email,
-      },
-      autoSignIn: {
-        enabled: true,
-      },
-    })
-      .then(() => {
-        setError("");
-        setTimeout(() => {
-          transfer(true);
-          navigate("/");
-        }, 500);
-      })
-      .catch((e) => setError(e.message));
+  const handleSignUp = async () => {
+    try {
+      await Auth.signUp({
+        username,
+        password,
+        attributes: {
+          email,
+        },
+        autoSignIn: {
+          enabled: true,
+        },
+      });
+      setError("");
+      const user = await API.graphql(
+        graphqlOperation(createUser, {
+          input: { username: username, online: true },
+        })
+      );
+      localStorage.setItem("uid", user.data.createUser.id);
+      setTimeout(() => {
+        transfer(true);
+        navigate("/");
+      }, 250);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -110,7 +119,7 @@ export const SignUpView = () => {
             <Button
               variant="contained"
               sx={{ width: "100%" }}
-              onClick={handleSignUp}
+              onClick={() => handleSignUp()}
             >
               Register
             </Button>
@@ -119,18 +128,13 @@ export const SignUpView = () => {
             <Typography sx={{ marginRight: 1 }}>
               Already have an account?
             </Typography>
-            <Link to="/login">Login Here</Link>
+            <Link to="/login">
+              <Typography>Login Here</Typography>
+            </Link>
           </Box>
         </Box>
       </Box>
-      {error && (
-        <Alert
-          severity="error"
-          sx={{ position: "absolute", bottom: 0, m: 2 }}
-        >
-          {error}
-        </Alert>
-      )}
+      <ErrorSnack error={error} handleError={setError} />
     </>
   );
 };

@@ -1,21 +1,38 @@
-import React from "react";
-import TextField from "@mui/material/TextField";
+import { memo, useContext, useEffect, useState } from "react";
 import { colors } from "../styles/colors";
+import { InputBase } from "@mui/material";
+import { UserModifyContext } from "../context/UserProvider";
 
-export default function MessageInput() {
+export const MessageInput = memo(() => {
+  const { handleSubmit } = useContext(UserModifyContext);
+  const [input, setInput] = useState("");
+
+  useEffect(() => {
+    return () => console.log("unmounted");
+  }, []);
+
   return (
-    <TextField
-      size="small"
+    <InputBase
       sx={{
-        position: "absolute",
-        width: "100%",
-        bottom: 1,
-        backgroundColor: colors.dBase,
+        width: "95%",
+        backgroundColor: colors.gray,
+        p: 1.5,
+        borderRadius: 2,
+        transform: "translateX(2.5%)",
       }}
-      inputProps={{ style: { color: "white" } }}
       multiline
-      label="Message"
-      variant="standard"
+      inputProps={{ style: { color: "white" } }}
+      placeholder="Enter a message"
+      onChange={(e) => setInput(e.target.value)}
+      value={input}
+      autoFocus
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          handleSubmit(input);
+          setInput("");
+        }
+      }}
     />
   );
-}
+});

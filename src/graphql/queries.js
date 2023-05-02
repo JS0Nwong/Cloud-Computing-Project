@@ -9,20 +9,38 @@ export const getMessage = /* GraphQL */ `
         id
         username
         about
+        online
         messages {
+          items {
+            id
+            userId
+            chatroomId
+            content
+            createdAt
+            updatedAt
+            messageUserId
+          }
           nextToken
         }
         chatrooms {
+          items {
+            id
+            userId
+            chatroomId
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         createdAt
         updatedAt
       }
-      userID
-      chatroomID
+      userId
+      chatroomId
       content
       createdAt
       updatedAt
+      messageUserId
     }
   }
 `;
@@ -39,14 +57,22 @@ export const listMessages = /* GraphQL */ `
           id
           username
           about
+          online
+          messages {
+            nextToken
+          }
+          chatrooms {
+            nextToken
+          }
           createdAt
           updatedAt
         }
-        userID
-        chatroomID
+        userId
+        chatroomId
         content
         createdAt
         updatedAt
+        messageUserId
       }
       nextToken
     }
@@ -58,14 +84,24 @@ export const getUser = /* GraphQL */ `
       id
       username
       about
+      online
       messages {
         items {
           id
-          userID
-          chatroomID
+          user {
+            id
+            username
+            about
+            online
+            createdAt
+            updatedAt
+          }
+          userId
+          chatroomId
           content
           createdAt
           updatedAt
+          messageUserId
         }
         nextToken
       }
@@ -74,6 +110,20 @@ export const getUser = /* GraphQL */ `
           id
           userId
           chatroomId
+          user {
+            id
+            username
+            about
+            online
+            createdAt
+            updatedAt
+          }
+          chatroom {
+            id
+            name
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
         }
@@ -95,10 +145,27 @@ export const listUsers = /* GraphQL */ `
         id
         username
         about
+        online
         messages {
+          items {
+            id
+            userId
+            chatroomId
+            content
+            createdAt
+            updatedAt
+            messageUserId
+          }
           nextToken
         }
         chatrooms {
+          items {
+            id
+            userId
+            chatroomId
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -118,6 +185,20 @@ export const getChatroom = /* GraphQL */ `
           id
           userId
           chatroomId
+          user {
+            id
+            username
+            about
+            online
+            createdAt
+            updatedAt
+          }
+          chatroom {
+            id
+            name
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
         }
@@ -126,11 +207,20 @@ export const getChatroom = /* GraphQL */ `
       messages {
         items {
           id
-          userID
-          chatroomID
+          user {
+            id
+            username
+            about
+            online
+            createdAt
+            updatedAt
+          }
+          userId
+          chatroomId
           content
           createdAt
           updatedAt
+          messageUserId
         }
         nextToken
       }
@@ -150,9 +240,25 @@ export const listChatrooms = /* GraphQL */ `
         id
         name
         users {
+          items {
+            id
+            userId
+            chatroomId
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         messages {
+          items {
+            id
+            userId
+            chatroomId
+            content
+            createdAt
+            updatedAt
+            messageUserId
+          }
           nextToken
         }
         createdAt
@@ -172,10 +278,27 @@ export const getUserCR = /* GraphQL */ `
         id
         username
         about
+        online
         messages {
+          items {
+            id
+            userId
+            chatroomId
+            content
+            createdAt
+            updatedAt
+            messageUserId
+          }
           nextToken
         }
         chatrooms {
+          items {
+            id
+            userId
+            chatroomId
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -185,9 +308,25 @@ export const getUserCR = /* GraphQL */ `
         id
         name
         users {
+          items {
+            id
+            userId
+            chatroomId
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         messages {
+          items {
+            id
+            userId
+            chatroomId
+            content
+            createdAt
+            updatedAt
+            messageUserId
+          }
           nextToken
         }
         createdAt
@@ -213,12 +352,25 @@ export const listUserCRS = /* GraphQL */ `
           id
           username
           about
+          online
+          messages {
+            nextToken
+          }
+          chatrooms {
+            nextToken
+          }
           createdAt
           updatedAt
         }
         chatroom {
           id
           name
+          users {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -229,17 +381,17 @@ export const listUserCRS = /* GraphQL */ `
     }
   }
 `;
-export const messagesByUserIDAndContent = /* GraphQL */ `
-  query MessagesByUserIDAndContent(
-    $userID: ID!
+export const messagesByUserIdAndContent = /* GraphQL */ `
+  query MessagesByUserIdAndContent(
+    $userId: ID!
     $content: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelMessageFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    messagesByUserIDAndContent(
-      userID: $userID
+    messagesByUserIdAndContent(
+      userId: $userId
       content: $content
       sortDirection: $sortDirection
       filter: $filter
@@ -252,31 +404,39 @@ export const messagesByUserIDAndContent = /* GraphQL */ `
           id
           username
           about
+          online
+          messages {
+            nextToken
+          }
+          chatrooms {
+            nextToken
+          }
           createdAt
           updatedAt
         }
-        userID
-        chatroomID
+        userId
+        chatroomId
         content
         createdAt
         updatedAt
+        messageUserId
       }
       nextToken
     }
   }
 `;
-export const messagesByChatroomIDAndContent = /* GraphQL */ `
-  query MessagesByChatroomIDAndContent(
-    $chatroomID: ID!
-    $content: ModelStringKeyConditionInput
+export const messagesByChatroomIdAndCreatedAt = /* GraphQL */ `
+  query MessagesByChatroomIdAndCreatedAt(
+    $chatroomId: ID!
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelMessageFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    messagesByChatroomIDAndContent(
-      chatroomID: $chatroomID
-      content: $content
+    messagesByChatroomIdAndCreatedAt(
+      chatroomId: $chatroomId
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -288,12 +448,69 @@ export const messagesByChatroomIDAndContent = /* GraphQL */ `
           id
           username
           about
+          online
+          messages {
+            nextToken
+          }
+          chatrooms {
+            nextToken
+          }
           createdAt
           updatedAt
         }
-        userID
-        chatroomID
+        userId
+        chatroomId
         content
+        createdAt
+        updatedAt
+        messageUserId
+      }
+      nextToken
+    }
+  }
+`;
+export const usersByUsername = /* GraphQL */ `
+  query UsersByUsername(
+    $username: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    usersByUsername(
+      username: $username
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        username
+        about
+        online
+        messages {
+          items {
+            id
+            userId
+            chatroomId
+            content
+            createdAt
+            updatedAt
+            messageUserId
+          }
+          nextToken
+        }
+        chatrooms {
+          items {
+            id
+            userId
+            chatroomId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -324,12 +541,25 @@ export const userCRSByUserId = /* GraphQL */ `
           id
           username
           about
+          online
+          messages {
+            nextToken
+          }
+          chatrooms {
+            nextToken
+          }
           createdAt
           updatedAt
         }
         chatroom {
           id
           name
+          users {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -363,12 +593,25 @@ export const userCRSByChatroomId = /* GraphQL */ `
           id
           username
           about
+          online
+          messages {
+            nextToken
+          }
+          chatrooms {
+            nextToken
+          }
           createdAt
           updatedAt
         }
         chatroom {
           id
           name
+          users {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
           createdAt
           updatedAt
         }

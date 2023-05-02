@@ -12,6 +12,7 @@ export const SignOutButton = () => {
   const handleSignOut = () => {
     Auth.signOut()
       .then(() => {
+        localStorage.removeItem("uid");
         transfer(true);
         navigate("/login");
       })
