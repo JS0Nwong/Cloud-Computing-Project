@@ -25,9 +25,10 @@ export default function Chat() {
       <Box
         sx={{
           backgroundColor: colors.base,
-          p: 2,
+          p: 1,
           display: "flex",
           justifyContent: chatsPresent ? "space-between" : "flex-end",
+          alignItems: "center",
         }}
       >
         {chatsPresent && (
@@ -39,6 +40,7 @@ export default function Chat() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
             width: 125,
           }}
         >
@@ -101,7 +103,7 @@ const Chatroom = ({ chatrooms, chatIndex }) => {
               {fDate.split(",").join("")}
             </Typography>
           </Box>
-          <Box>
+          <Box sx={{ wordBreak: "break-all" }}>
             <Typography sx={{ fontSize: 16 }}>{content}</Typography>
           </Box>
         </Box>

@@ -20,6 +20,7 @@ export const MessageInput = memo(() => {
         borderRadius: 2,
         transform: "translateX(2.5%)",
       }}
+      cols={20}
       multiline
       inputProps={{ style: { color: "white" } }}
       placeholder="Enter a message"
