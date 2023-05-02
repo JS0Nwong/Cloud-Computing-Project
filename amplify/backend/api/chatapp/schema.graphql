@@ -5,23 +5,25 @@ input AMPLIFY {
 } # FOR TESTING ONLY!
 type Message @model {
   id: ID!
-  user: User!
-  userID: ID! @index(name: "byUserMessage", sortKeyFields: ["content"])
-  chatroomID: ID! @index(name: "byChatroom", sortKeyFields: ["content"])
+  user: User! @hasOne
+  userId: ID! @index(name: "byUserMessage", sortKeyFields: ["content"])
+  chatroomId: ID! @index(name: "byChatroom", sortKeyFields: ["createdAt"])
   content: String!
+  createdAt: String!
 }
 
 type User @model {
   id: ID!
-  username: String!
+  username: String! @index
   about: String
-  messages: [Message]! @hasMany(indexName: "byUserMessage", fields: ["id"])
-  chatrooms: [Chatroom]! @manyToMany(relationName: "userCR")
+  online: Boolean!
+  messages: [Message!]! @hasMany(indexName: "byUserMessage", fields: ["id"])
+  chatrooms: [Chatroom!]! @manyToMany(relationName: "userCR")
 }
 
 type Chatroom @model {
   id: ID!
-  name: String!
-  users: [User]! @manyToMany(relationName: "userCR")
-  messages: [Message]! @hasMany(indexName: "byChatroom", fields: ["id"])
+  name: String
+  users: [User!]! @manyToMany(relationName: "userCR")
+  messages: [Message!]! @hasMany(indexName: "byChatroom", fields: ["id"])
 }

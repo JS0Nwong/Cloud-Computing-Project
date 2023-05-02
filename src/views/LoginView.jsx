@@ -2,8 +2,10 @@ import { Box, Button, Typography, TextField, Alert } from "@mui/material";
 import { colors } from "../styles/colors";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { Auth } from "aws-amplify";
+import { Auth, API, graphqlOperation } from "aws-amplify";
 import { AuthContext } from "../context/AuthProvider";
+import { usersByUsername } from "../graphql/queries";
+import { ErrorSnack } from "../components/ErrorSnack";
 
 export const LoginView = () => {
   const [username, setUsername] = useState("");
@@ -12,14 +14,19 @@ export const LoginView = () => {
   const navigate = useNavigate();
   const { transfer } = useContext(AuthContext);
 
-  const handleLogin = () => {
-    Auth.signIn(username, password)
-      .then(() => {
-        setError("");
-        transfer(true);
-        navigate("/");
-      })
-      .catch((e) => setError(e.message));
+  const handleLogin = async () => {
+    try {
+      await Auth.signIn(username, password);
+      setError("");
+      const user = await API.graphql(
+        graphqlOperation(usersByUsername, { username: username })
+      );
+      localStorage.setItem("uid", user.data.usersByUsername.items[0].id);
+      transfer(true);
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -92,15 +99,13 @@ export const LoginView = () => {
             <Typography sx={{ marginRight: 1 }}>
               Don't have an account?
             </Typography>
-            <Link to="/signup">Register Here</Link>
+            <Link to="/signup">
+              <Typography>Register Here</Typography>
+            </Link>
           </Box>
         </Box>
       </Box>
-      {error && (
-        <Alert severity="error" sx={{ position: "absolute", bottom: 0, m: 2 }}>
-          {error}
-        </Alert>
-      )}
+      <ErrorSnack error={error} handleError={setError} />
     </>
   );
 };
