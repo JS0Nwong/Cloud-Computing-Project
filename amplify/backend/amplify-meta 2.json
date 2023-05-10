@@ -1,0 +1,113 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-chatapp-devs-214505-authRole",
+      "UnauthRoleArn": "arn:aws:iam::113441400955:role/amplify-chatapp-devs-214505-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::113441400955:role/amplify-chatapp-devs-214505-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-chatapp-devs-214505-deployment",
+      "UnauthRoleName": "amplify-chatapp-devs-214505-unauthRole",
+      "StackName": "amplify-chatapp-devs-214505",
+      "StackId": "arn:aws:cloudformation:us-east-1:113441400955:stack/amplify-chatapp-devs-214505/2078c4f0-ee0b-11ed-b543-0e355982f003",
+      "AmplifyAppId": "dt7qdlx2sibnq"
+    }
+  },
+  "api": {
+    "chatapp": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "chatapp39566c45"
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authchatapp39566c45"
+              }
+            }
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        },
+        "GraphQLAPIIdOutput": "bkmztlbt2nbshmyvqgju5i2z24",
+        "GraphQLAPIEndpointOutput": "https://gskhhv2j45f4pfkkiwdrk2crta.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-qk2gg2ollbbjvn2oyzk2mcsrx4"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-chatapp-devs-214505-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apichatapp"
+      },
+      "lastPushTimeStamp": "2023-05-09T16:46:53.824Z",
+      "lastPushDirHash": "JeabmIgpPQr1os/MLY4/Kw7zUXQ="
+    }
+  },
+  "auth": {
+    "chatapp39566c45": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-chatapp-devs-214505-deployment/amplify-cfn-templates/auth/chatapp39566c45-cloudformation-template.json",
+        "logicalId": "authchatapp39566c45"
+      },
+      "lastPushTimeStamp": "2023-05-09T16:46:53.824Z",
+      "output": {
+        "UserPoolId": "us-east-1_2M6JAAMLW",
+        "AppClientIDWeb": "32e75q0ulo89b5ivmitda5p7ah",
+        "AppClientID": "rhpnme76dejrko8g8eg7ot5n3",
+        "IdentityPoolId": "us-east-1:25a45630-e2fb-48ba-9a57-42f3f54ffc5f",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:113441400955:userpool/us-east-1_2M6JAAMLW",
+        "IdentityPoolName": "chatapp39566c45_identitypool_39566c45__devs",
+        "UserPoolName": "chatapp39566c45_userpool_39566c45"
+      },
+      "lastPushDirHash": "FPWl/6nm7JuR5WWxg9i4+MjqkVM="
+    }
+  },
+  "function": {},
+  "hosting": {
+    "amplifyhosting": {
+      "providerPlugin": "awscloudformation",
+      "service": "amplifyhosting",
+      "type": "manual",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-chatapp-devs-214505-deployment/amplify-cfn-templates/hosting/amplifyhosting-template.json",
+        "logicalId": "hostingamplifyhosting"
+      },
+      "lastPushTimeStamp": "2023-05-09T16:46:53.824Z",
+      "output": {},
+      "lastPushDirHash": "cAQ8fpQ9mUEEH/Wb0gzuiWtG+uU="
+    }
+  }
+}

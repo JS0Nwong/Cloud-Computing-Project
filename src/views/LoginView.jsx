@@ -1,20 +1,78 @@
-import { Box, Button, Typography, TextField, Alert } from "@mui/material";
+import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import { TextField, Button, Container, Typography, Alert, Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import SpeakEZLogo from "../styles/speakez-logo.png";
+import SocializingPeople from "../styles/peopleSocializing.png";
+import SloganImage from "../styles/slogan.png";
+
+
 import { colors } from "../styles/colors";
-import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { AuthContext } from "../context/AuthProvider";
 import { usersByUsername } from "../graphql/queries";
 import { ErrorSnack } from "../components/ErrorSnack";
 
+
+const PageContainer = styled(Container)({
+  display: "contents",
+  height: "100%",
+  backgroundColor: "#0D0820",
+  alignItems: "center",
+  justifyContent: "space-between",
+  width: "100%"
+});
+
+
+const LogoContainer = styled(Container)({
+  backgroundColor: "#0D0820",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  width: "30%",
+  padding: "0px",
+});
+
+const LogoImage = styled("img")({
+  width: "100%",
+  maxWidth: "30%",
+  marginLeft: "10px"
+});
+
+const BackgroundImage = styled("img")({
+  height: "auto",
+  maxHeight: "100vh",
+  maxWidth: "30%",
+  objectFit: "cover",
+});
+
+const FormContainer = styled(Container)({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  padding: "32px",
+});
+
+const SloganImg = styled("img")({
+  height: "auto",
+  width: "90%",
+  margin: "0 auto",
+  display: "block",
+  marginLeft: "-6%"
+});
+
+
 export const LoginView = () => {
+ 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { transfer } = useContext(AuthContext);
 
-  const handleLogin = async () => {
+  const handleLoginClick = async () => {
     try {
       await Auth.signIn(username, password);
       setError("");
@@ -30,82 +88,115 @@ export const LoginView = () => {
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          backgroundColor: colors.dBase,
-          borderRadius: 2,
-          width: { xs: 300, sm: 400, md: 500 },
-          height: 400,
-          mx: 3,
-          p: 3,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Box sx={{ marginBottom: 3 }}>
-          <Typography component="h1" variant="h4">
-            Login
+    <PageContainer>
+      <LogoImage src={SpeakEZLogo} alt="SpeakEZ Logo" />
+      <Container sx={{ display: "flex", flexDirection: "column", width: "40%" }}>
+        <SloganImg src={SloganImage} alt="Slogan" />
+        <FormContainer>
+          <Typography variant="h5" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
+            Welcome back!
           </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "80%",
-          }}
-        >
-          <Box sx={{ my: 1 }}>
-            <Typography sx={{ color: "white" }}>Username</Typography>
-            <TextField
-              sx={{
-                backgroundColor: colors.ddBase,
-                borderRadius: 1,
-                input: {
-                  color: "white",
+
+          <TextField
+            label="Username"
+            variant="outlined"
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            fullWidth
+            placeholder="Enter your Username"
+            InputLabelProps={{
+              style: {
+                color: "#fff",
+                fontSize: "18px",
+              },
+            }}
+            InputProps={{
+              sx: {
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#7C41D9",
                 },
-                width: "100%",
-              }}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </Box>
-          <Box sx={{ my: 1 }}>
-            <Typography sx={{ color: "white" }}>Password</Typography>
-            <TextField
-              sx={{
-                backgroundColor: colors.ddBase,
-                borderRadius: 1,
-                input: {
-                  color: "white",
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#7C41D9",
                 },
-                width: "100%",
-              }}
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Box>
-          <Box sx={{ my: 2 }}>
-            <Button
-              variant="contained"
-              sx={{ width: "100%" }}
-              onClick={handleLogin}
-            >
-              Login
-            </Button>
-          </Box>
-          <Box sx={{ my: 1, display: "flex" }}>
-            <Typography sx={{ marginRight: 1 }}>
-              Don't have an account?
-            </Typography>
-            <Link to="/signup">
-              <Typography>Register Here</Typography>
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#7C41D9",
+                },
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "#1E0C38",
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#7C41D9",
+                  },
+                },
+                "& .MuiInputBase-input": {
+                  color: "#fff",
+                },
+              },
+            }}
+          />
+
+          <TextField
+            label="Password"
+            type="password"
+            variant="outlined"
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+            placeholder="Enter your Password"
+            InputLabelProps={{
+              style: {
+                color: '#fff',
+              },
+            }}
+            InputProps={{
+              sx: {
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "#7C41D9"
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "#7C41D9"
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: "#7C41D9"
+                },
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: "#1E0C38",
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: "#7C41D9"
+                  },
+                },
+                '& .MuiInputBase-input': {
+                  color: "#fff",
+                  '&::placeholder': {
+                    color: "#C4C4C4",
+                  }
+                }
+              }
+            }}
+          />
+
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleLoginClick}
+            fullWidth
+            style={{ backgroundColor: '#4670f7' }}
+          >
+            Sign In
+          </Button>
+
+
+          <Typography variant="body2" sx={{ marginTop: "16px" }}>
+            Don't have an account?{" "}
+            <Link to="/signup" style={{ color: "#fff" }}>
+              Register here
             </Link>
-          </Box>
-        </Box>
-      </Box>
-      <ErrorSnack error={error} handleError={setError} />
-    </>
+          </Typography>
+        </FormContainer>
+      </Container>
+      <BackgroundImage src={SocializingPeople} alt="Socializing People" />
+    </PageContainer>
   );
-};
+}  
