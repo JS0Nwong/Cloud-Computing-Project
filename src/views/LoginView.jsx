@@ -1,19 +1,15 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { TextField, Button, Container, Typography, Alert, Box } from "@mui/material";
+import { TextField, Button, Container, Typography} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SpeakEZLogo from "../styles/speakez-logo.png";
 import SocializingPeople from "../styles/peopleSocializing.png";
 import SloganImage from "../styles/slogan.png";
-
-
-import { colors } from "../styles/colors";
 import { useNavigate } from "react-router-dom";
-
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { AuthContext } from "../context/AuthProvider";
 import { usersByUsername } from "../graphql/queries";
-import { ErrorSnack } from "../components/ErrorSnack";
+
 
 
 const PageContainer = styled(Container)({
@@ -23,16 +19,6 @@ const PageContainer = styled(Container)({
   alignItems: "center",
   justifyContent: "space-between",
   width: "100%"
-});
-
-
-const LogoContainer = styled(Container)({
-  backgroundColor: "#0D0820",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  width: "30%",
-  padding: "0px",
 });
 
 const LogoImage = styled("img")({
@@ -74,6 +60,10 @@ export const LoginView = () => {
 
   const handleLoginClick = async () => {
     try {
+      if (!username || !password) {
+        setError("*Please fill out both fields.");
+        return;
+      }
       await Auth.signIn(username, password);
       setError("");
       const user = await API.graphql(
@@ -83,20 +73,22 @@ export const LoginView = () => {
       transfer(true);
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      setError(`*${err.message}`);
     }
   };
 
   return (
     <PageContainer>
       <LogoImage src={SpeakEZLogo} alt="SpeakEZ Logo" />
-      <Container sx={{ display: "flex", flexDirection: "column", width: "40%" }}>
+      <Container  className="pop-up" sx={{ display: "flex", flexDirection: "column", width: "40%" }}>
         <SloganImg src={SloganImage} alt="Slogan" />
         <FormContainer>
           <Typography variant="h5" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
             Welcome back!
           </Typography>
-
+          <Typography variant="h6" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
+            We're so excited to see you again!
+          </Typography>
           <TextField
             label="Username"
             variant="outlined"
@@ -134,7 +126,6 @@ export const LoginView = () => {
               },
             }}
           />
-
           <TextField
             label="Password"
             type="password"
@@ -175,8 +166,11 @@ export const LoginView = () => {
               }
             }}
           />
-
-
+          {error && (
+            <Typography variant="body1" style={{ color: "red", marginTop: "8px" }}>
+              {error}
+            </Typography>
+          )}
           <Button
             variant="contained"
             color="primary"
@@ -186,8 +180,6 @@ export const LoginView = () => {
           >
             Sign In
           </Button>
-
-
           <Typography variant="body2" sx={{ marginTop: "16px" }}>
             Don't have an account?{" "}
             <Link to="/signup" style={{ color: "#fff" }}>
