@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { TextField, Button, Container, Typography } from "@mui/material";
+import { TextField, Button, Container, Typography, CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SpeakEZLogo from "../styles/speakez-logo.png";
 import SocializingPeople from "../styles/peopleSocializing.png";
@@ -11,6 +11,12 @@ import { AuthContext } from "../context/AuthProvider";
 import { createUser } from "../graphql/mutations";
 
 
+const LoadingContainer = styled(Container)`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const PageContainer = styled(Container)({
   display: "contents",
@@ -58,6 +64,8 @@ export const SignUpView = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { transfer } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleSignUpClick = async () => {
     if (!email || !username || !password) {
@@ -70,6 +78,7 @@ export const SignUpView = () => {
       return;
     }
     try {
+      setIsLoading(true);
       await Auth.signUp({
         username,
         password,
@@ -93,159 +102,166 @@ export const SignUpView = () => {
       }, 250);
     } catch (err) {
       setError(`*${err.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-
-
   return (
     <PageContainer>
-      <LogoImage src={SpeakEZLogo} alt="SpeakEZ Logo" />
-      <Container  className="pop-up" sx={{ display: "flex", flexDirection: "column", width: "40%" }}>
-        <SloganImg src={SloganImage} alt="Slogan" />
-        <FormContainer>
-          <Typography variant="h5" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
-            Create an Account!
-          </Typography>
+      {isLoading ? ( // show loading spinner if isLoading is true
+        <LoadingContainer>
+          <CircularProgress />
+        </LoadingContainer>
+      ) : (
+        <>
+          <LogoImage src={SpeakEZLogo} alt="SpeakEZ Logo" />
+          <Container className="pop-up" sx={{ display: "flex", flexDirection: "column", width: "40%" }}>
+            <SloganImg src={SloganImage} alt="Slogan" />
+            <FormContainer>
+              <Typography variant="h5" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
+                Create an Account!
+              </Typography>
 
-          <TextField
-            label="E-mail"
-            variant="outlined"
-            margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            placeholder="Enter your E-mail @"
-            InputLabelProps={{
-              style: {
-                color: "#fff",
-                fontSize: "18px",
-              },
-            }}
-            InputProps={{
-              sx: {
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#7C41D9",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#7C41D9",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#7C41D9",
-                },
-                "& .MuiOutlinedInput-root": {
-                  backgroundColor: "#1E0C38",
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#7C41D9",
+              <TextField
+                label="E-mail"
+                variant="outlined"
+                margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                placeholder="Enter your E-mail @"
+                InputLabelProps={{
+                  style: {
+                    color: "#fff",
+                    fontSize: "18px",
                   },
-                },
-                "& .MuiInputBase-input": {
-                  color: "#fff",
-                },
-              },
-            }}
-          />
+                }}
+                InputProps={{
+                  sx: {
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#7C41D9",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#7C41D9",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#7C41D9",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "#1E0C38",
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#7C41D9",
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      color: "#fff",
+                    },
+                  },
+                }}
+              />
 
-          <TextField
-            label="Username"
-            variant="outlined"
-            margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            fullWidth
-            placeholder="Create your Username"
-            InputLabelProps={{
-              style: {
-                color: "#fff",
-                fontSize: "18px",
-              },
-            }}
-            InputProps={{
-              sx: {
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#7C41D9",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#7C41D9",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#7C41D9",
-                },
-                "& .MuiOutlinedInput-root": {
-                  backgroundColor: "#1E0C38",
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#7C41D9",
+              <TextField
+                label="Username"
+                variant="outlined"
+                margin="normal"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                fullWidth
+                placeholder="Create your Username"
+                InputLabelProps={{
+                  style: {
+                    color: "#fff",
+                    fontSize: "18px",
                   },
-                },
-                "& .MuiInputBase-input": {
-                  color: "#fff",
-                },
-              },
-            }}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            placeholder="Create your Password"
-            InputLabelProps={{
-              style: {
-                color: '#fff',
-              },
-            }}
-            InputProps={{
-              sx: {
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: "#7C41D9"
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: "#7C41D9"
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: "#7C41D9"
-                },
-                '& .MuiOutlinedInput-root': {
-                  backgroundColor: "#1E0C38",
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: "#7C41D9"
+                }}
+                InputProps={{
+                  sx: {
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#7C41D9",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#7C41D9",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#7C41D9",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "#1E0C38",
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#7C41D9",
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      color: "#fff",
+                    },
                   },
-                },
-                '& .MuiInputBase-input': {
-                  color: "#fff",
-                  '&::placeholder': {
-                    color: "#C4C4C4",
+                }}
+              />
+              <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                placeholder="Create your Password"
+                InputLabelProps={{
+                  style: {
+                    color: '#fff',
+                  },
+                }}
+                InputProps={{
+                  sx: {
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: "#7C41D9"
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: "#7C41D9"
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: "#7C41D9"
+                    },
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: "#1E0C38",
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: "#7C41D9"
+                      },
+                    },
+                    '& .MuiInputBase-input': {
+                      color: "#fff",
+                      '&::placeholder': {
+                        color: "#C4C4C4",
+                      }
+                    }
                   }
-                }
-              }
-            }}
-          />
-          {error && (
-            <Typography variant="body1" style={{ color: "red", marginTop: "8px" }}>
-              {error}
-            </Typography>
-          )}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSignUpClick}
-            fullWidth
-            style={{ backgroundColor: '#4670f7' }}
-          >
-            Sign Up
-          </Button>
-          <Typography variant="body2" sx={{ marginTop: "16px" }}>
-            Already have an account?{" "}
-            <Link to="/login" style={{ color: "#fff" }}>
-              Login here
-            </Link>
-          </Typography>
-        </FormContainer>
-      </Container>
-      <BackgroundImage src={SocializingPeople} alt="Socializing People" />
+                }}
+              />
+              {error && (
+                <Typography variant="body1" style={{ color: "red", marginTop: "8px" }}>
+                  {error}
+                </Typography>
+              )}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSignUpClick}
+                fullWidth
+                style={{ backgroundColor: '#4670f7' }}
+              >
+                Sign Up
+              </Button>
+              <Typography variant="body2" sx={{ marginTop: "16px" }}>
+                Already have an account?{" "}
+                <Link to="/login" style={{ color: "#fff" }}>
+                  Login here
+                </Link>
+              </Typography>
+            </FormContainer>
+          </Container>
+          <BackgroundImage src={SocializingPeople} alt="Socializing People" />
+        </>
+      )}
     </PageContainer>
   );
 }  

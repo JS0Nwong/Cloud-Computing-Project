@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { TextField, Button, Container, Typography} from "@mui/material";
+import { TextField, Button, Container, Typography, CircularProgress} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SpeakEZLogo from "../styles/speakez-logo.png";
 import SocializingPeople from "../styles/peopleSocializing.png";
@@ -11,6 +11,12 @@ import { AuthContext } from "../context/AuthProvider";
 import { usersByUsername } from "../graphql/queries";
 
 
+const LoadingContainer = styled(Container)`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const PageContainer = styled(Container)({
   display: "contents",
@@ -58,12 +64,18 @@ export const LoginView = () => {
   const navigate = useNavigate();
   const { transfer } = useContext(AuthContext);
 
+  const [isLoading, setIsLoading] = useState(false); 
+
+
   const handleLoginClick = async () => {
     try {
       if (!username || !password) {
         setError("*Please fill out both fields.");
         return;
       }
+
+      setIsLoading(true);
+
       await Auth.signIn(username, password);
       setError("");
       const user = await API.graphql(
@@ -74,16 +86,27 @@ export const LoginView = () => {
       navigate("/");
     } catch (err) {
       setError(`*${err.message}`);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
   return (
+
     <PageContainer>
-      <LogoImage src={SpeakEZLogo} alt="SpeakEZ Logo" />
-      <Container  className="pop-up" sx={{ display: "flex", flexDirection: "column", width: "40%" }}>
-        <SloganImg src={SloganImage} alt="Slogan" />
-        <FormContainer>
-          <Typography variant="h5" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
+
+      {isLoading ? ( // show loading spinner if isLoading is true
+        <LoadingContainer>
+          <CircularProgress />
+        </LoadingContainer>
+      ) : (
+        <>
+
+          <LogoImage src={SpeakEZLogo} alt="SpeakEZ Logo" />
+          <Container className="pop-up" sx={{ display: "flex", flexDirection: "column", width: "40%" }}>
+            <SloganImg src={SloganImage} alt="Slogan" />
+            <FormContainer>
+              <Typography variant="h5" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
             Welcome back!
           </Typography>
           <Typography variant="h6" component="h1" gutterBottom sx={{ alignSelf: "flex-start" }}>
@@ -189,6 +212,10 @@ export const LoginView = () => {
         </FormContainer>
       </Container>
       <BackgroundImage src={SocializingPeople} alt="Socializing People" />
+
+      </>
+      )}
     </PageContainer>
+
   );
 }  
