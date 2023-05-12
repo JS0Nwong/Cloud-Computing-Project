@@ -15,13 +15,13 @@ export const MessageInput = memo(() => {
     <InputBase
       sx={{
         width: "95%",
-        backgroundColor: colors.gray,
+        backgroundColor: "#c8c8c8",
         p: 1.5,
         borderRadius: 2,
         transform: "translateX(2.5%)",
       }}
       multiline
-      inputProps={{ style: { color: "white" } }}
+      inputProps={{ style: { color: "black" } }}
       placeholder="Enter a message"
       onChange={(e) => setInput(e.target.value)}
       value={input}

@@ -20,10 +20,16 @@ export const SignOutButton = () => {
   };
   return (
     <button
-      onClick={handleSignOut}
-      style={{ backgroundColor: "inherit", border: "none", cursor: "pointer" }}
-    >
-      <LogoutIcon />
-    </button>
+  onClick={handleSignOut}
+  style={{
+    backgroundColor: "inherit",
+    border: "none",
+    cursor: "pointer",
+    color: "#fff"
+  }}
+>
+  <LogoutIcon />
+</button>
+
   );
 };

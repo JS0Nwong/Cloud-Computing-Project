@@ -7,7 +7,9 @@ import { colors } from "../styles/colors";
 import { SignOutButton } from "../components/SignOutButton";
 import { UserValContext } from "../context/UserProvider";
 
+
 export default function Chat() {
+
   const { chatrooms, chatIndex } = useContext(UserValContext);
   const chatsPresent = chatrooms.length > 0;
 
@@ -16,7 +18,7 @@ export default function Chat() {
       sx={{
         flex: 5,
         position: "relative",
-        backgroundColor: colors.base,
+        backgroundImage: "linear-gradient(#444A9E, #6E3A9F, #933D9E)",
         display: "flex",
         flexDirection: "column",
         width: "100%",
@@ -24,7 +26,7 @@ export default function Chat() {
     >
       <Box
         sx={{
-          backgroundColor: colors.base,
+          backgroundColor: colors.darkPurpleBase,
           p: 1,
           display: "flex",
           justifyContent: chatsPresent ? "space-between" : "flex-end",
@@ -76,6 +78,9 @@ const NoUserAdded = () => {
 const Chatroom = ({ chatrooms, chatIndex }) => {
   const messages = chatrooms.at(chatIndex).chatroom.messages;
 
+  const { user } = useContext(UserValContext);
+  const currentUser = user.username;
+
   const ChatMessage = ({ user, content, date }) => {
     const tempDate = new Date(date);
     const fDate = tempDate.toLocaleString([], {
@@ -85,34 +90,68 @@ const Chatroom = ({ chatrooms, chatIndex }) => {
       hour: "2-digit",
       minute: "2-digit",
     });
+  
+    const isSentByCurrentUser = user.username === currentUser;
 
+    
+    const bubbleStyles = {
+      height: "auto",
+      padding: "10px",
+      borderRadius: "20px",
+      marginBottom: "10px",
+      wordBreak: "break-word",
+      backgroundColor: isSentByCurrentUser ? "#2979FF" : "#F3F3F3",
+      color: isSentByCurrentUser ? "#FFF" : "#000",
+      alignSelf: isSentByCurrentUser ? "flex-end" : "flex-start",
+    };
     return (
-      <Box sx={{ display: "flex", alignItems: "center", my: 2, ml: 4, mr: 2 }}>
-        <Avatar />
-        <Box sx={{ ml: 2 }}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Typography sx={{ fontWeight: 700, fontSize: 20 }}>
-              {user.username}
-            </Typography>
-            <Typography sx={{ ml: 2, fontSize: 12, color: "#a2a3a6" }}>
-              {fDate.split(",").join("")}
-            </Typography>
-          </Box>
-          <Box sx={{ wordBreak: "break-all" }}>
-            <Typography sx={{ fontSize: 16 }}>{content}</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-end",
+          flexDirection: isSentByCurrentUser ? "row-reverse" : "row",
+          marginBottom: "10px",
+          marginLeft: isSentByCurrentUser ? "50%" : 0,
+          marginRight: isSentByCurrentUser ? 0 : "50%",
+        }}
+      >
+       <Avatar sx={{ mr: isSentByCurrentUser ? 2 : 0, ml: isSentByCurrentUser ? 0 : 0 }} />
+        <Box sx={{ ml: 0 }}>
+        <Box
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: isSentByCurrentUser ? "flex-end" : "flex-start",
+  }}
+>
+  <Typography sx={{ fontWeight: 600, fontSize: 18 }}>
+    {user.username}
+  </Typography>
+  <Typography sx={{ ml: 2, fontSize: 12, color: "#a2a3a6" }}>
+    {fDate.split(",").join("")}
+  </Typography>
+</Box>
+
+          <Box sx={{ wordBreak: "break-word" }}>
+            <Box sx={bubbleStyles}>
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  overflowWrap: "break-word",
+                }}
+              >
+                {content}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
     );
   };
+  
 
   return (
-    <Box sx={{ height: "100%", p: 1, overflow: "hidden" }}>
+    <Box sx={{ height: "100%", paddingLeft: 2, paddingRight: 2, overflow: "hidden" }}>
       <Box
         sx={{
           height: "90%",
