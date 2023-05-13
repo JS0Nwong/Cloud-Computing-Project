@@ -58,7 +58,13 @@
       "service": "Cognito"
     }
   },
-  "function": {},
+  "function": {
+    "chimeVCHandler": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "hosting": {
     "amplifyhosting": {
       "providerPlugin": "awscloudformation",
@@ -67,6 +73,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_chimeVCHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chimeVCHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_chimeVCHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "chimeVCHandler"
+        }
+      ]
+    },
     "AMPLIFY_hosting_amplifyhosting_appId": {
       "usedBy": [
         {
