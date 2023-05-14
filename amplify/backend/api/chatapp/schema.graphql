@@ -34,6 +34,8 @@ type Mutation {
     @function(name: "chimeVCHandler-${env}")
   addAttendee(meetingId: String, userId: String): Response
     @function(name: "chimeVCHandler-${env}")
+  listAttendees(meetingId: String): Response
+    @function(name: "chimeVCHandler-${env}")
   endMeeting(meetingId: String): Response
     @function(name: "chimeVCHandler-${env}")
   getMeeting(meetingId: String): Response
