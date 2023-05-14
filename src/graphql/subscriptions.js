@@ -173,6 +173,7 @@ export const onCreateUser = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -229,6 +230,7 @@ export const onUpdateUser = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -285,6 +287,7 @@ export const onDeleteUser = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -303,6 +306,7 @@ export const onCreateChatroom = /* GraphQL */ `
     onCreateChatroom(filter: $filter) {
       id
       name
+      meetingId
       users {
         items {
           id
@@ -319,6 +323,7 @@ export const onCreateChatroom = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -357,6 +362,7 @@ export const onUpdateChatroom = /* GraphQL */ `
     onUpdateChatroom(filter: $filter) {
       id
       name
+      meetingId
       users {
         items {
           id
@@ -373,6 +379,7 @@ export const onUpdateChatroom = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -411,6 +418,7 @@ export const onDeleteChatroom = /* GraphQL */ `
     onDeleteChatroom(filter: $filter) {
       id
       name
+      meetingId
       users {
         items {
           id
@@ -427,6 +435,7 @@ export const onDeleteChatroom = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -499,6 +508,7 @@ export const onCreateUserCR = /* GraphQL */ `
       chatroom {
         id
         name
+        meetingId
         users {
           items {
             id
@@ -568,6 +578,7 @@ export const onUpdateUserCR = /* GraphQL */ `
       chatroom {
         id
         name
+        meetingId
         users {
           items {
             id
@@ -637,6 +648,7 @@ export const onDeleteUserCR = /* GraphQL */ `
       chatroom {
         id
         name
+        meetingId
         users {
           items {
             id

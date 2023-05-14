@@ -1,6 +1,38 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createMeeting = /* GraphQL */ `
+  mutation CreateMeeting($region: String) {
+    createMeeting(region: $region) {
+      statusCode
+      body
+    }
+  }
+`;
+export const addAttendee = /* GraphQL */ `
+  mutation AddAttendee($meetingId: String, $userId: String) {
+    addAttendee(meetingId: $meetingId, userId: $userId) {
+      statusCode
+      body
+    }
+  }
+`;
+export const endMeeting = /* GraphQL */ `
+  mutation EndMeeting($meetingId: String) {
+    endMeeting(meetingId: $meetingId) {
+      statusCode
+      body
+    }
+  }
+`;
+export const getMeeting = /* GraphQL */ `
+  mutation GetMeeting($meetingId: String) {
+    getMeeting(meetingId: $meetingId) {
+      statusCode
+      body
+    }
+  }
+`;
 export const createMessage = /* GraphQL */ `
   mutation CreateMessage(
     $input: CreateMessageInput!
@@ -185,6 +217,7 @@ export const createUser = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -244,6 +277,7 @@ export const updateUser = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -303,6 +337,7 @@ export const deleteUser = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -324,6 +359,7 @@ export const createChatroom = /* GraphQL */ `
     createChatroom(input: $input, condition: $condition) {
       id
       name
+      meetingId
       users {
         items {
           id
@@ -340,6 +376,7 @@ export const createChatroom = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -381,6 +418,7 @@ export const updateChatroom = /* GraphQL */ `
     updateChatroom(input: $input, condition: $condition) {
       id
       name
+      meetingId
       users {
         items {
           id
@@ -397,6 +435,7 @@ export const updateChatroom = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -438,6 +477,7 @@ export const deleteChatroom = /* GraphQL */ `
     deleteChatroom(input: $input, condition: $condition) {
       id
       name
+      meetingId
       users {
         items {
           id
@@ -454,6 +494,7 @@ export const deleteChatroom = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -529,6 +570,7 @@ export const createUserCR = /* GraphQL */ `
       chatroom {
         id
         name
+        meetingId
         users {
           items {
             id
@@ -601,6 +643,7 @@ export const updateUserCR = /* GraphQL */ `
       chatroom {
         id
         name
+        meetingId
         users {
           items {
             id
@@ -673,6 +716,7 @@ export const deleteUserCR = /* GraphQL */ `
       chatroom {
         id
         name
+        meetingId
         users {
           items {
             id
