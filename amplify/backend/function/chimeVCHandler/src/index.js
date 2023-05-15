@@ -62,26 +62,9 @@ const getMeeting = async (context) => {
   }
 };
 
-<<<<<<< HEAD
 const resolvers = {
   createMeeting: (context) => createMeeting(context),
   addAttendee: (context) => addAttendee(context),
-=======
-const listAttendees = async (context) => {
-  const meetingId = context.arguments.meetingId;
-  try {
-    const res = await chime.listAttendees({ MeetingId: meetingId }).promise();
-    return response(200, { attendees: res });
-  } catch (err) {
-    return response(400, { error: err });
-  }
-};
-
-const resolvers = {
-  createMeeting: (context) => createMeeting(context),
-  addAttendee: (context) => addAttendee(context),
-  listAttendees: (context) => listAttendees(context),
->>>>>>> main
   endMeeting: (context) => endMeeting(context),
   getMeeting: (context) => getMeeting(context),
 };
