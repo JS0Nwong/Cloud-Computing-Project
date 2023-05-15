@@ -24,6 +24,23 @@ type User @model {
 type Chatroom @model {
   id: ID!
   name: String
+  meetingId: String
   users: [User!]! @manyToMany(relationName: "userCR")
   messages: [Message!]! @hasMany(indexName: "byChatroom", fields: ["id"])
+}
+
+type Mutation {
+  createMeeting(region: String): Response
+    @function(name: "chimeVCHandler-${env}")
+  addAttendee(meetingId: String, userId: String): Response
+    @function(name: "chimeVCHandler-${env}")
+  endMeeting(meetingId: String): Response
+    @function(name: "chimeVCHandler-${env}")
+  getMeeting(meetingId: String): Response
+    @function(name: "chimeVCHandler-${env}")
+}
+
+type Response {
+  statusCode: Int!
+  body: String
 }

@@ -121,6 +121,7 @@ export const getUser = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -180,6 +181,7 @@ export const getChatroom = /* GraphQL */ `
     getChatroom(id: $id) {
       id
       name
+      meetingId
       users {
         items {
           id
@@ -196,6 +198,7 @@ export const getChatroom = /* GraphQL */ `
           chatroom {
             id
             name
+            meetingId
             createdAt
             updatedAt
           }
@@ -239,6 +242,7 @@ export const listChatrooms = /* GraphQL */ `
       items {
         id
         name
+        meetingId
         users {
           items {
             id
@@ -307,6 +311,7 @@ export const getUserCR = /* GraphQL */ `
       chatroom {
         id
         name
+        meetingId
         users {
           items {
             id
@@ -365,6 +370,7 @@ export const listUserCRS = /* GraphQL */ `
         chatroom {
           id
           name
+          meetingId
           users {
             nextToken
           }
@@ -554,6 +560,7 @@ export const userCRSByUserId = /* GraphQL */ `
         chatroom {
           id
           name
+          meetingId
           users {
             nextToken
           }
@@ -606,6 +613,7 @@ export const userCRSByChatroomId = /* GraphQL */ `
         chatroom {
           id
           name
+          meetingId
           users {
             nextToken
           }

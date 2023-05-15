@@ -1,9 +1,9 @@
-import { Box, Button } from "@mui/material";
+import { ButtonBase, IconButton } from "@mui/material";
 import { Auth } from "aws-amplify";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
-import LogoutIcon from "@mui/icons-material/Logout";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 export const SignOutButton = () => {
   const navigate = useNavigate();
@@ -16,14 +16,11 @@ export const SignOutButton = () => {
         transfer(true);
         navigate("/login");
       })
-      .catch(() => console.log("Not loggined in"));
+      .catch(() => console.log("Not logged in"));
   };
   return (
-    <button
-      onClick={handleSignOut}
-      style={{ backgroundColor: "inherit", border: "none", cursor: "pointer" }}
-    >
-      <LogoutIcon />
-    </button>
+    <IconButton onClick={handleSignOut} sx={{ color: "inherit" }}>
+      <ExitToAppIcon />
+    </IconButton>
   );
 };

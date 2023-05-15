@@ -7,7 +7,11 @@ import {
   listUsers,
   messagesByChatroomIdAndCreatedAt,
 } from "../graphql/queries";
-import { onCreateChatroom, onCreateMessage } from "../graphql/subscriptions";
+import {
+  onCreateChatroom,
+  onCreateMessage,
+  onUpdateChatroom,
+} from "../graphql/subscriptions";
 import { createMessage } from "../graphql/mutations";
 
 export const UserModifyContext = createContext();
@@ -19,44 +23,6 @@ export function UserProvider({ children }) {
   const [chatrooms, setChatrooms] = useState(null);
   const [allUsers, setAllUsers] = useState(null);
   const [chatIndex, setChatIndex] = useState(0);
-
-  const getCurrUser = async () => {
-    const res = await API.graphql(graphqlOperation(getUser, { id: uid }));
-    const user = res.data.getUser;
-    setUser(user);
-  };
-
-  const chatAlter = async () => {
-    const cuItems = user ? user.chatrooms.items : [];
-
-    const chatrooms = [];
-
-    for (const coll of cuItems) {
-      const res = await API.graphql(
-        graphqlOperation(listUserCRS, {
-          filter: {
-            chatroomId: { eq: coll.chatroomId },
-            and: [{ userId: { ne: user.id } }],
-          },
-        })
-      );
-
-      const room = res.data.listUserCRS.items.at(0);
-
-      const cUser = await API.graphql(
-        graphqlOperation(messagesByChatroomIdAndCreatedAt, {
-          chatroomId: room.chatroomId,
-          sortDirection: "DESC",
-        })
-      );
-
-      room.chatroom.messages =
-        cUser.data.messagesByChatroomIdAndCreatedAt.items;
-      chatrooms.push(room);
-    }
-
-    setChatrooms(chatrooms);
-  };
 
   const handleSubmit = async (input) => {
     if (input.trim()) {
@@ -73,14 +39,20 @@ export function UserProvider({ children }) {
     }
   };
 
-  const findUsers = async () => {
-    const res = await API.graphql(graphqlOperation(listUsers));
-    const foundUsers = res.data.listUsers.items;
-
-    setAllUsers(foundUsers.filter((fUser) => fUser.id !== uid));
-  };
-
   useEffect(() => {
+    const getCurrUser = async () => {
+      const res = await API.graphql(graphqlOperation(getUser, { id: uid }));
+      const user = res.data.getUser;
+      setUser(user);
+    };
+
+    const findUsers = async () => {
+      const res = await API.graphql(graphqlOperation(listUsers));
+      const foundUsers = res.data.listUsers.items;
+
+      setAllUsers(foundUsers.filter((fUser) => fUser.id !== uid));
+    };
+
     getCurrUser();
     findUsers();
   }, []);
@@ -133,6 +105,18 @@ export function UserProvider({ children }) {
       error: (err) => console.log(err),
     });
 
+    const chatUpdateSub = API.graphql(
+      graphqlOperation(onUpdateChatroom)
+    ).subscribe({
+      next: ({ value }) => {
+        const data = value.data.onUpdateChatroom;
+        setChatrooms((curr) => {
+          curr.at(chatIndex).chatroom.meetingId = data.meetingId;
+          return curr;
+        });
+      },
+    });
+
     const messageCreateSub = API.graphql(
       graphqlOperation(onCreateMessage)
     ).subscribe({
@@ -142,7 +126,7 @@ export function UserProvider({ children }) {
           setChatrooms((curr) => {
             const memT = JSON.parse(JSON.stringify(curr));
 
-            memT.at(chatIndex).chatroom.messages.unshift(data);
+            memT.at(chatIndex).chatroom.messages.push(data);
 
             return memT;
           });
@@ -153,11 +137,44 @@ export function UserProvider({ children }) {
 
     return () => {
       chatCreateSub.unsubscribe();
+      chatUpdateSub.unsubscribe();
       messageCreateSub.unsubscribe();
     };
   }, [chatIndex, chatrooms]);
 
   useEffect(() => {
+    const chatAlter = async () => {
+      const cuItems = user ? user.chatrooms.items : [];
+
+      const chatrooms = [];
+
+      for (const coll of cuItems) {
+        const res = await API.graphql(
+          graphqlOperation(listUserCRS, {
+            filter: {
+              chatroomId: { eq: coll.chatroomId },
+              and: [{ userId: { ne: user.id } }],
+            },
+          })
+        );
+
+        const room = res.data.listUserCRS.items.at(0);
+
+        const cUser = await API.graphql(
+          graphqlOperation(messagesByChatroomIdAndCreatedAt, {
+            chatroomId: room.chatroomId,
+            sortDirection: "ASC",
+          })
+        );
+
+        room.chatroom.messages =
+          cUser.data.messagesByChatroomIdAndCreatedAt.items;
+        chatrooms.push(room);
+      }
+
+      setChatrooms(chatrooms);
+    };
+
     chatAlter();
   }, [user]);
 

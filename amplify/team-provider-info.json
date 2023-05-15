@@ -23,6 +23,12 @@
           "appId": "dt7qdlx2sibnq",
           "type": "manual"
         }
+      },
+      "function": {
+        "chimeVCHandler": {
+          "deploymentBucketName": "amplify-chatapp-dev-141804-deployment",
+          "s3Key": "amplify-builds/chimeVCHandler-5455617532676470704d-build.zip"
+        }
       }
     }
   }
