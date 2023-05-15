@@ -10,8 +10,8 @@ export const MessageInput = memo(() => {
   return (
     <InputBase
       sx={{
-        width: "100%",
-        backgroundColor: colors.gray,
+        width: "95%",
+        backgroundColor: "#c8c8c8",
         p: 1.5,
         borderRadius: 2,
         transform: "translateX(2.5%)",
@@ -19,7 +19,7 @@ export const MessageInput = memo(() => {
         overflowY: "auto",
       }}
       multiline
-      inputProps={{ style: { color: "white" } }}
+      inputProps={{ style: { color: "black" } }}
       placeholder="Enter a message"
       onChange={(e) => setInput(e.target.value)}
       value={input}

@@ -116,7 +116,7 @@ export default function Chats() {
     <>
       <Box
         sx={{
-          backgroundColor: colors.dBase,
+          backgroundColor: colors.darkPurpleBase,
           width: "100%",
           fontWeight: 500,
           position: "relative",

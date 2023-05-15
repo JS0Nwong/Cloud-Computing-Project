@@ -210,7 +210,7 @@ export const Call = ({ close }) => {
     <>
       <Box
         sx={{
-          backgroundColor: colors.ddBase,
+          backgroundColor: colors.darkPurpleBase,
           width: "100%",
           minHeight: "30%",
           position: "relative",

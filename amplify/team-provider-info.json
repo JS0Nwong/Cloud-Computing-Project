@@ -27,8 +27,40 @@
       "function": {
         "chimeVCHandler": {
           "deploymentBucketName": "amplify-chatapp-dev-141804-deployment",
+<<<<<<< HEAD
           "s3Key": "amplify-builds/chimeVCHandler-5455617532676470704d-build.zip"
         }
+=======
+          "s3Key": "amplify-builds/chimeVCHandler-77793765537a57614d67-build.zip"
+        }
+      }
+    }
+  },
+  "devs": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-chatapp-devs-214505-authRole",
+      "UnauthRoleArn": "arn:aws:iam::113441400955:role/amplify-chatapp-devs-214505-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::113441400955:role/amplify-chatapp-devs-214505-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-chatapp-devs-214505-deployment",
+      "UnauthRoleName": "amplify-chatapp-devs-214505-unauthRole",
+      "StackName": "amplify-chatapp-devs-214505",
+      "StackId": "arn:aws:cloudformation:us-east-1:113441400955:stack/amplify-chatapp-devs-214505/2078c4f0-ee0b-11ed-b543-0e355982f003",
+      "AmplifyAppId": "dt7qdlx2sibnq"
+    },
+    "categories": {
+      "auth": {
+        "chatapp39566c45": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dt7qdlx2sibnq",
+          "type": "manual"
+        }
+      },
+      "api": {
+        "chatapp": {}
+>>>>>>> main
       }
     }
   }

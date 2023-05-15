@@ -1,3 +1,16 @@
 #root {
   margin: 0 auto;
 }
+
+.pop-up {
+  animation: pop-up 0.3s ease-out;
+}
+
+@keyframes pop-up {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

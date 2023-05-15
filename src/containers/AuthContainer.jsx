@@ -19,7 +19,7 @@ const AuthContainer = () => {
     return (
       <Box
         sx={{
-          backgroundColor: colors.blueBase,
+          backgroundColor: colors.darkPurpleBase,
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",

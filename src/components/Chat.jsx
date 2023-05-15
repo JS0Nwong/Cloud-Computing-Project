@@ -17,7 +17,7 @@ export default function Chat() {
       sx={{
         flex: 5,
         position: "relative",
-        backgroundColor: colors.base,
+        backgroundImage: "linear-gradient(#444A9E, #6E3A9F, #933D9E)",
         display: "flex",
         flexDirection: "column",
         width: "100%",
@@ -26,15 +26,11 @@ export default function Chat() {
       {!callOpen && (
         <Box
           sx={{
-            backgroundColor: colors.base,
+            backgroundColor: colors.darkPurpleBase,
             p: 1,
             display: "flex",
             justifyContent: chatsPresent ? "space-between" : "flex-end",
             alignItems: "center",
-            border: "0px",
-            borderStyle: "solid",
-            borderBottomWidth: "2px",
-            borderBottomColor: "#2a2c32",
           }}
         >
           {chatsPresent && !callOpen && (
@@ -90,6 +86,7 @@ const Chatroom = ({ callOpen, close }) => {
   const { user, chatrooms, chatIndex } = useContext(UserValContext);
   const currChatroom = chatrooms.at(chatIndex);
   const bRef = useRef();
+  const currentUser = user.username;
 
   useEffect(() => {
     bRef.current.scrollIntoView({ behavior: "smooth" });
@@ -98,6 +95,82 @@ const Chatroom = ({ callOpen, close }) => {
   useEffect(() => {
     return close;
   }, [chatIndex]);
+
+  const ChatMessage = ({ user, content, date }) => {
+    const tempDate = new Date(date);
+    const fDate = tempDate.toLocaleString([], {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const isSentByCurrentUser = user.username === currentUser;
+
+    const bubbleStyles = {
+      height: "auto",
+      padding: "10px",
+      borderRadius: "20px",
+      borderBottomLeftRadius: !isSentByCurrentUser && "5px",
+      borderBottomRightRadius: isSentByCurrentUser && "5px",
+      marginBottom: "20px",
+      marginLeft: "3px",
+      marginRight: "3px",
+      wordBreak: "break-word",
+      backgroundColor: isSentByCurrentUser ? "#2979FF" : "#F3F3F3",
+      color: isSentByCurrentUser ? "#FFF" : "#000",
+      alignSelf: isSentByCurrentUser ? "flex-end" : "flex-start",
+    };
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-end",
+          flexDirection: isSentByCurrentUser ? "row-reverse" : "row",
+          marginBottom: "10px",
+          marginLeft: isSentByCurrentUser ? "50%" : 0,
+          marginRight: isSentByCurrentUser ? 0 : "50%",
+        }}
+      >
+        <Avatar
+          sx={{
+            mr: isSentByCurrentUser ? 2 : 0,
+            ml: isSentByCurrentUser ? 0 : 0,
+          }}
+        />
+        <Box sx={{ ml: 0 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: isSentByCurrentUser ? "flex-end" : "flex-start",
+            }}
+          >
+            <Typography sx={{ fontWeight: 600, fontSize: 18 }}>
+              {user.username}
+            </Typography>
+            <Typography sx={{ ml: 2, fontSize: 12, color: "#a2a3a6" }}>
+              {fDate.split(",").join("")}
+            </Typography>
+          </Box>
+
+          <Box sx={{ wordBreak: "break-word" }}>
+            <Box sx={bubbleStyles}>
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  overflowWrap: "break-word",
+                }}
+              >
+                {content}
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    );
+  };
 
   return (
     <Box
@@ -142,41 +215,6 @@ const Chatroom = ({ callOpen, close }) => {
         }}
       >
         <MessageInput />
-      </Box>
-    </Box>
-  );
-};
-
-const ChatMessage = ({ user, content, date }) => {
-  const tempDate = new Date(date);
-  const fDate = tempDate.toLocaleString([], {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  return (
-    <Box sx={{ display: "flex", alignItems: "center", my: 2, ml: 4, mr: 2 }}>
-      <Avatar />
-      <Box sx={{ ml: 2 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Typography sx={{ fontWeight: 700, fontSize: 20 }}>
-            {user.username}
-          </Typography>
-          <Typography sx={{ ml: 2, fontSize: 12, color: "#a2a3a6" }}>
-            {fDate.split(",").join("")}
-          </Typography>
-        </Box>
-        <Box sx={{ wordBreak: "break-all" }}>
-          <Typography sx={{ fontSize: 16 }}>{content}</Typography>
-        </Box>
       </Box>
     </Box>
   );
