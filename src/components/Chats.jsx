@@ -63,7 +63,9 @@ export default function Chats() {
       } else {
         setDisabled((curr) => ({ ...curr, [i]: true }));
 
-        const chatroom = await API.graphql(graphqlOperation(createChatroom));
+        const chatroom = await API.graphql(
+          graphqlOperation(createChatroom, { input: {} })
+        );
 
         const chatId = chatroom.data.createChatroom.id;
 
