@@ -146,7 +146,7 @@ export default function Chats() {
             <AddIcon sx={{ color: colors.blue, height: "auto", width: 30 }} />
           </ButtonBase>
         </Box>
-        <Box>
+        <Box sx={{ overflowY: "auto", overflowX: "hidden" }}>
           {chatrooms &&
             chatrooms.map((room, i) => {
               return <ChatButton user={room.user} key={room.id} i={i} />;

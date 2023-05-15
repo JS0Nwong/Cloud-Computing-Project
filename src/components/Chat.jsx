@@ -1,17 +1,16 @@
-import { useContext } from "react";
-import { Box, Typography, Avatar } from "@mui/material";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Box, Typography, Avatar, IconButton } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
-import VideocamIcon from "@mui/icons-material/Videocam";
 import { MessageInput } from "./MessageInput";
 import { colors } from "../styles/colors";
+import { Call } from "./Call";
 import { SignOutButton } from "../components/SignOutButton";
 import { UserValContext } from "../context/UserProvider";
 
-
 export default function Chat() {
-
   const { chatrooms, chatIndex } = useContext(UserValContext);
   const chatsPresent = chatrooms.length > 0;
+  const [callOpen, setCallOpen] = useState(false);
 
   return (
     <Box
@@ -24,35 +23,43 @@ export default function Chat() {
         width: "100%",
       }}
     >
-      <Box
-        sx={{
-          backgroundColor: colors.darkPurpleBase,
-          p: 1,
-          display: "flex",
-          justifyContent: chatsPresent ? "space-between" : "flex-end",
-          alignItems: "center",
-        }}
-      >
-        {chatsPresent && (
-          <Typography sx={{ fontSize: 18 }}>
-            {chatrooms.at(chatIndex).user.username}
-          </Typography>
-        )}
+      {!callOpen && (
         <Box
           sx={{
+            backgroundColor: colors.darkPurpleBase,
+            p: 1,
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: chatsPresent ? "space-between" : "flex-end",
             alignItems: "center",
-            width: 125,
           }}
         >
-          <PhoneIcon />
-          <VideocamIcon />
-          <SignOutButton />
+          {chatsPresent && !callOpen && (
+            <Typography sx={{ fontSize: 18 }}>
+              {chatrooms.at(chatIndex).user.username}
+            </Typography>
+          )}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: chatsPresent ? "space-between" : "flex-end",
+              alignItems: "center",
+              width: 90,
+            }}
+          >
+            {chatsPresent && (
+              <IconButton
+                sx={{ color: "inherit" }}
+                onClick={() => setCallOpen(true)}
+              >
+                <PhoneIcon />
+              </IconButton>
+            )}
+            <SignOutButton />
+          </Box>
         </Box>
-      </Box>
+      )}
       {chatsPresent ? (
-        <Chatroom chatrooms={chatrooms} chatIndex={chatIndex} />
+        <Chatroom callOpen={callOpen} close={() => setCallOpen(false)} />
       ) : (
         <NoUserAdded />
       )}
@@ -75,11 +82,19 @@ const NoUserAdded = () => {
   );
 };
 
-const Chatroom = ({ chatrooms, chatIndex }) => {
-  const messages = chatrooms.at(chatIndex).chatroom.messages;
-
-  const { user } = useContext(UserValContext);
+const Chatroom = ({ callOpen, close }) => {
+  const { user, chatrooms, chatIndex } = useContext(UserValContext);
+  const currChatroom = chatrooms.at(chatIndex);
+  const bRef = useRef();
   const currentUser = user.username;
+
+  useEffect(() => {
+    bRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [currChatroom, callOpen]);
+
+  useEffect(() => {
+    return close;
+  }, [chatIndex]);
 
   const ChatMessage = ({ user, content, date }) => {
     const tempDate = new Date(date);
@@ -90,15 +105,18 @@ const Chatroom = ({ chatrooms, chatIndex }) => {
       hour: "2-digit",
       minute: "2-digit",
     });
-  
+
     const isSentByCurrentUser = user.username === currentUser;
 
-    
     const bubbleStyles = {
       height: "auto",
       padding: "10px",
       borderRadius: "20px",
-      marginBottom: "10px",
+      borderBottomLeftRadius: !isSentByCurrentUser && "5px",
+      borderBottomRightRadius: isSentByCurrentUser && "5px",
+      marginBottom: "20px",
+      marginLeft: "3px",
+      marginRight: "3px",
       wordBreak: "break-word",
       backgroundColor: isSentByCurrentUser ? "#2979FF" : "#F3F3F3",
       color: isSentByCurrentUser ? "#FFF" : "#000",
@@ -115,22 +133,27 @@ const Chatroom = ({ chatrooms, chatIndex }) => {
           marginRight: isSentByCurrentUser ? 0 : "50%",
         }}
       >
-       <Avatar sx={{ mr: isSentByCurrentUser ? 2 : 0, ml: isSentByCurrentUser ? 0 : 0 }} />
+        <Avatar
+          sx={{
+            mr: isSentByCurrentUser ? 2 : 0,
+            ml: isSentByCurrentUser ? 0 : 0,
+          }}
+        />
         <Box sx={{ ml: 0 }}>
-        <Box
-  sx={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: isSentByCurrentUser ? "flex-end" : "flex-start",
-  }}
->
-  <Typography sx={{ fontWeight: 600, fontSize: 18 }}>
-    {user.username}
-  </Typography>
-  <Typography sx={{ ml: 2, fontSize: 12, color: "#a2a3a6" }}>
-    {fDate.split(",").join("")}
-  </Typography>
-</Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: isSentByCurrentUser ? "flex-end" : "flex-start",
+            }}
+          >
+            <Typography sx={{ fontWeight: 600, fontSize: 18 }}>
+              {user.username}
+            </Typography>
+            <Typography sx={{ ml: 2, fontSize: 12, color: "#a2a3a6" }}>
+              {fDate.split(",").join("")}
+            </Typography>
+          </Box>
 
           <Box sx={{ wordBreak: "break-word" }}>
             <Box sx={bubbleStyles}>
@@ -148,19 +171,30 @@ const Chatroom = ({ chatrooms, chatIndex }) => {
       </Box>
     );
   };
-  
 
   return (
-    <Box sx={{ height: "100%", paddingLeft: 2, paddingRight: 2, overflow: "hidden" }}>
+    <Box
+      sx={{
+        height: "100%",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {callOpen && (
+        <Call userId1={user.id} userId2={currChatroom.user.id} close={close} />
+      )}
       <Box
         sx={{
-          height: "90%",
-          overflowY: "scroll",
+          overflowY: "auto",
           display: "flex",
-          flexDirection: "column-reverse",
+          flexDirection: "column",
+          mx: 1,
+          my: "2px",
+          flexGrow: 1,
         }}
       >
-        {messages.map((message) => {
+        {currChatroom.chatroom.messages.map((message) => {
           return (
             <ChatMessage
               user={message.user}
@@ -170,12 +204,14 @@ const Chatroom = ({ chatrooms, chatIndex }) => {
             />
           );
         })}
+        <div ref={bRef} />
       </Box>
       <Box
         sx={{
-          width: "100%",
+          width: "95%",
           backgroundColor: colors.base,
-          height: "10%",
+          mb: 5,
+          display: "flex",
         }}
       >
         <MessageInput />

@@ -1,4 +1,3 @@
-import { Box, Button } from "@mui/material";
 import { Auth } from "aws-amplify";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,20 +15,19 @@ export const SignOutButton = () => {
         transfer(true);
         navigate("/login");
       })
-      .catch(() => console.log("Not loggined in"));
+      .catch(() => console.log("Not logged in"));
   };
   return (
     <button
-  onClick={handleSignOut}
-  style={{
-    backgroundColor: "inherit",
-    border: "none",
-    cursor: "pointer",
-    color: "#fff"
-  }}
->
-  <LogoutIcon />
-</button>
-
+      onClick={handleSignOut}
+      style={{
+        backgroundColor: "inherit",
+        border: "none",
+        cursor: "pointer",
+        color: "#fff",
+      }}
+    >
+      <LogoutIcon />
+    </button>
   );
 };

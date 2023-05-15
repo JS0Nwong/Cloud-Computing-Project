@@ -7,10 +7,6 @@ export const MessageInput = memo(() => {
   const { handleSubmit } = useContext(UserModifyContext);
   const [input, setInput] = useState("");
 
-  useEffect(() => {
-    return () => console.log("unmounted");
-  }, []);
-
   return (
     <InputBase
       sx={{
@@ -19,6 +15,8 @@ export const MessageInput = memo(() => {
         p: 1.5,
         borderRadius: 2,
         transform: "translateX(2.5%)",
+        maxHeight: 200,
+        overflowY: "auto",
       }}
       multiline
       inputProps={{ style: { color: "black" } }}

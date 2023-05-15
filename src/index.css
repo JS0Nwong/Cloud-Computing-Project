@@ -6,7 +6,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #0D0820;
+  background-color: #0d0820;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -25,11 +25,10 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-color: #1f1e22;
+  background-color: #c8c8c8;
 }
 
 body {
   margin: 0;
   padding: 0;
 }
-
